@@ -1,0 +1,26 @@
+apiVersion: autoscaling.k8s.io/v1
+kind: VerticalPodAutoscaler
+metadata:
+  name: grafana-k8s-monitoring-alloy-logs
+  namespace: observability
+spec:
+  scope: node
+  resourcePolicy:
+    containerPolicies:
+    - containerName: alloy
+      maxAllowed:
+        cpu: 8
+        memory: 32Gi
+      minAllowed:
+        cpu: 1m
+        memory: 16Mi
+      mode: Auto
+    - containerName: config-reloader
+      mode: "Off"
+  targetRef:
+    apiVersion: apps/v1
+    kind: DaemonSet
+    name: grafana-k8s-monitoring-alloy-logs
+  updatePolicy:
+    minReplicas: 1
+    updateMode: "Auto"

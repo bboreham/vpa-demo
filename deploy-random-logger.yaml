@@ -1,0 +1,26 @@
+# This config creates a deployment with 
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: random-log
+spec:
+  selector:
+    matchLabels:
+      app: random-log
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: random-log
+    spec:
+      containers:
+        - name: random-log
+          image: mingrammer/flog:0.4.3
+          resources:
+            requests:
+              cpu: 100m
+              memory: 50Mi
+          args: ["-d", "1ms", "-l"]
+      nodeSelector:
+        kubernetes.io/hostname: kind-worker2
